@@ -2,6 +2,7 @@
 Simple, safe parsing utilities for GENIVI's Vehicle Signal Specification.
 """
 
+import struct
 import re
 from dataclasses import InitVar, dataclass, field
 from typing import Dict, List, Literal, Optional, Set, Tuple, Union, get_type_hints
@@ -52,6 +53,8 @@ INT_BOUNDS = {
     'uint64': (0, 2 ** 64 - 1),
     'int64': (-2 ** 63, 2 ** 63 - 1)
 }
+FLOAT_BOUNDS = struct.unpack('>ff', b'\xff\x7f\xff\xff\x7f\x7f\xff\xff')
+DOUBLE_BOUNDS = (struct.unpack('>dd', b'\xff\xef\xff\xff\xff\xff\xff\xff\x7f\xef\xff\xff\xff\xff\xff\xff'))
 
 
 class VSSBranchError(KeyError):
@@ -76,6 +79,13 @@ class Signal:
     min: Optional[Union[float, int]] = None
     unit: str = 'dimensionless'
 
+    def clamp(self, value: Union[float, int]) -> Union[float, int]:
+        if self.datatype in ('string', 'boolean'):
+            raise ValueError(f'cannot clamp numeric value to non-numeric datatype {self.datatype}')
+
+        type_ = float if self.datatype in ('float', 'double') else int
+        return type_(max(min(value, self.max), self.min))
+
     def __post_init__(self, reg: pint.UnitRegistry) -> None:
         # VSS uses some Pascal-cased data types, so lower-case them then let super type check them.
         # noinspection PyCallByClass
@@ -83,10 +93,36 @@ class Signal:
 
         # Process enum into a more agreeable format.
         if self.enum is not None:
+            if self.datatype != 'string':
+                raise ValueError(f'enum provided for non-string datatype {self.datatype}')
+
             # noinspection PyCallByClass
             object.__setattr__(self, 'enum', set(self.enum))
 
-        # Ensure default value matches datatype.
+        # Set min and max based on datatype for numeric signals.
+        if self.datatype not in ('string', 'boolean'):
+            if 'int' in self.datatype:
+                try:
+                    low, high = INT_BOUNDS[self.datatype]
+                except KeyError:
+                    raise ValueError(f'unrecognized datatype {self.datatype}') from None
+            elif self.datatype == 'float':
+                low, high = FLOAT_BOUNDS
+            elif self.datatype == 'double':
+                low, high = DOUBLE_BOUNDS
+            else:
+                raise ValueError(f'unrecognized datatype {self.datatype}')
+
+            if self.min is None:
+                object.__setattr__(self, 'min', low)
+            else:
+                object.__setattr__(self, 'min', max(self.min, low))
+            if self.max is None:
+                object.__setattr__(self, 'max', high)
+            else:
+                object.__setattr__(self, 'max', min(self.max, high))
+
+        # Ensure default value matches datatype and bounds.
         if self.default is not None:
             if (isinstance(self.default, float) and self.datatype not in ('float', 'double')) or \
                     (isinstance(self.default, int) and 'int' not in self.datatype) or \
@@ -95,20 +131,19 @@ class Signal:
                 raise ValueError(f'default value type {type(self.default)} does not match '
                                  f'expected datatype {self.datatype}')
 
-            if 'int' in self.datatype:
-                try:
-                    low, high = INT_BOUNDS[self.datatype]
-                except KeyError:
-                    raise ValueError(f'unrecognized datatype {self.datatype}') from None
+            if self.clamp(self.default) != self.default:
+                raise ValueError(f'default value {self.default} is illegal for datatype {self.datatype}')
 
-                if not low <= self.default <= high:
-                    raise ValueError(f'default value {self.default} is illegal for datatype {self.datatype}')
-
+        # Parse pint unit from unit string.
         try:
             # noinspection PyCallByClass
             object.__setattr__(self, 'pint_unit', reg.parse_units(self.unit))
         except Exception:
             raise ValueError(f'illegal unit {self.unit!r}') from None
+
+        # Non-numeric data types must not have a unit.
+        if self.datatype in ('string', 'boolean') and not self.pint_unit.dimensionless:
+            raise ValueError(f'datatype {self.datatype} is not compatible with unit {self.pint_unit:~}')
 
         # Ensure namespace is valid.
         if len(self.namespace) == 0:
