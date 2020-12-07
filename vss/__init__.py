@@ -28,6 +28,11 @@ registry.define('@alias hour = h')
 # Fix Pascal casing issue until https://github.com/GENIVI/vehicle_signal_specification/issues/206.
 registry.define('@alias pascal = pa')
 
+# Fix caret issue until https://github.com/GENIVI/vehicle_signal_specification/pull/218.
+registry.define('square_seconds = s ** 2 = s2')
+registry.define('cubic_cm = cm ** 3 = cm3')
+
+
 Datatype = Literal[
     'double',
     'float',
