@@ -18,7 +18,7 @@ class VSSSpecError(Exception):
 
 
 @typechecked(always=True)
-def load_tree(name: str = 'vss_rel_2.0.0-alpha+006@e71db4c6.json') -> VSSTree:
+def load_tree(name: str = 'vss_rel_2.0.0-alpha+006@87155cc.json') -> VSSTree:
     """
     Loads a VSS tree from the named JSON file.
 
