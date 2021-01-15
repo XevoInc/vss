@@ -1,4 +1,9 @@
 # VSS
+
+![Build status](https://img.shields.io/github/workflow/status/XevoInc/vss/Push%20CI/master)
+[![PyPI](https://img.shields.io/pypi/v/vss)](https://pypi.org/project/vss/)
+![PyPI - License](https://img.shields.io/pypi/l/vss)
+
 Simple, safe parsing utilities for [GENIVI's Vehicle Signal Specification](https://github.com/GENIVI/vehicle_signal_specification). [Pint](https://github.com/hgrecco/pint) is used for unit parsing and [typeguard](https://github.com/agronholm/typeguard) is used for type safety.
 
 ## Compatibility
