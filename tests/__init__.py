@@ -72,32 +72,11 @@ class FindSignalTestCase(TestCase):
         with self.assertRaisesRegex(VSSBranchError, f'node {namespace!r} is a branch, not a signal'):
             find_signal(namespace)
 
-    def test_find_with_instances(self) -> None:
-        find_signal('Vehicle.Cabin.Lights.Spotlight.Row1.IsSharedOn')
-        find_signal('Vehicle.Cabin.HVAC.Station.Row1.Left.FanSpeed')
-        find_signal('Vehicle.Cabin.HVAC.Station.Row2.Right.FanSpeed')
-        find_signal('Vehicle.Cabin.HVAC.Station.Row4.Left.Temperature')
-
-    def test_find_with_instances_missing(self) -> None:
-        with self.assertRaisesRegex(VSSBranchError,
-                                    r"got 'IsSharedOn' but must be one of .*"):
-            find_signal('Vehicle.Cabin.Lights.Spotlight.IsSharedOn')
-        with self.assertRaisesRegex(VSSBranchError,
-                                    "node 'Vehicle.Cabin.Lights.Spotlight' has instances, "
-                                    'expected one of .* after Spotlight'):
-            find_signal('Vehicle.Cabin.Lights.Spotlight')
-
-    def test_find_with_illegal_instances(self) -> None:
-        with self.assertRaisesRegex(VSSBranchError,
-                                    r"got 'Row7' but must be one of .*"):
-            find_signal('Vehicle.Cabin.Lights.Spotlight.Row7.IsSharedOn')
-
     def test_find_does_not_modify_root(self) -> None:
         root = load_tree()
         copy = deepcopy(root)
 
         self.test_find_avg_speed()
-        self.test_find_with_illegal_instances()
 
         self.assertDictEqual(root, copy)
 

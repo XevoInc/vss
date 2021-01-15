@@ -167,27 +167,6 @@ class Signal:
         return '.'.join(self.namespace)
 
 
-def _expand_instances(instances: str, namespace: Tuple[str, ...], idx: int) -> List[str]:
-    assert 0 <= idx <= len(namespace), f'illegal index {idx} not in [0, {len(namespace)}]'
-
-    # Expand condensed range format.
-    match = re.fullmatch(r'(.*)\[(\d+),(\d+)\]', instances)
-    if match is None:
-        found = '.'.join(namespace[:idx])
-        raise VSSSpecError(f'malformed instance {instances!r} on {found!r}')
-
-    name = match.group(1)
-    lower = int(match.group(2))
-    upper = int(match.group(3))
-
-    if upper <= lower:
-        found = '.'.join(namespace[:idx])
-        raise VSSSpecError(f'empty range [{lower},{upper}] on instance {name!r} for {found!r}')
-
-    # Range bounds are inclusive.
-    return [f'{name}{i}' for i in range(lower, upper + 1)]
-
-
 def _consume_instance(instances: List[str], namespace: Tuple[str, ...], idx: int) -> int:
     assert 0 <= idx <= len(namespace), f'illegal index {idx} not in [0, {len(namespace)}]'
 
@@ -206,52 +185,8 @@ def _consume_instance(instances: List[str], namespace: Tuple[str, ...], idx: int
 
 
 @typechecked(always=True)
-def _parse_instances(instances: Instances, namespace: Tuple[str, ...], idx: int) -> int:
-    assert 0 <= idx <= len(namespace), f'illegal index {idx} not in [0, {len(namespace)}]'
-
-    if isinstance(instances, str):
-        instances = _expand_instances(instances, namespace, idx)
-    elif len(instances) == 0:
-        found = '.'.join(namespace[:idx])
-        raise VSSSpecError(f'empty instances array on {found!r}')
-
-    try:
-        instances = [_expand_instances(i, namespace, idx) if isinstance(i, str) else i for i in instances]
-    except VSSSpecError:
-        pass
-
-    if all(isinstance(i, str) for i in instances):
-        # All children are strings, so the next name in the namespace must be one of the children.
-        return _consume_instance(instances, namespace, idx)
-
-    if all(isinstance(i, list) for i in instances):
-        # All children are lists, so we recursively match.
-        for pos, instance in enumerate(instances):
-            # Check for illegal nesting.
-            for i in instance:
-                if not isinstance(i, str):
-                    found = '.'.join(namespace[:idx])
-                    raise VSSSpecError(f'illegal nested instance[{pos}][{i}] on {found!r}')
-
-            idx = _consume_instance(instance, namespace, idx)
-
-        return idx
-
-    found = '.'.join(namespace[:idx])
-    raise VSSSpecError(f'malformed instances {instances!r} for {found!r}')
-
-
-@typechecked(always=True)
 def _find_signal(reg: pint.UnitRegistry, branch: Dict, namespace: Tuple[str, ...], idx: int) -> Signal:
     assert 0 <= idx <= len(namespace), f'illegal index {idx} not in [0, {len(namespace)}]'
-
-    # Instantiate any instances of this branch node.
-    try:
-        instances = branch['instances']
-    except KeyError:
-        pass
-    else:
-        idx = _parse_instances(instances, namespace, idx)
 
     # We've reached the desired node.
     if idx == len(namespace):
