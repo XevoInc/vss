@@ -3,9 +3,8 @@ Simple, safe parsing utilities for GENIVI's Vehicle Signal Specification.
 """
 
 import struct
-import re
 from dataclasses import InitVar, dataclass, field
-from typing import Dict, List, Literal, Optional, Set, Tuple, Union, get_type_hints
+from typing import Dict, get_type_hints, List, Literal, Optional, Set, Tuple, Union
 
 import pint
 from typeguard import typechecked, check_type

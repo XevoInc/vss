@@ -7,7 +7,7 @@ from typing import Dict
 import pkg_resources
 from typeguard import typechecked
 
-__all__ = ['load_tree', 'VSSTree']
+__all__ = ['load_tree', 'VSSTree', 'VSSSpecError']
 
 
 VSSTree = Dict
