@@ -18,8 +18,10 @@ __all__ = ['find_signal', 'registry', 'Signal', 'VSSBranchError']
 registry = pint.UnitRegistry(autoconvert_offset_to_baseunit=True)
 
 # Add VSS-specific units.
-registry.define('% = [] = percent')
-registry.define('ratio = [] = _')
+# TODO: remove after https://github.com/hgrecco/pint/issues/1242.
+registry.define('none = [] = dimensionless')
+registry.define('percent = []')
+registry.define('ratio = []')
 
 # VSS uses h as hour, but pint recognizes this as the Planck constant.
 registry.define('@alias hour = h')
@@ -73,7 +75,7 @@ class Signal:
     enum: Optional[Set[str]] = field(default=None, hash=False)
     max: Optional[Union[float, int]] = None
     min: Optional[Union[float, int]] = None
-    unit: str = 'dimensionless'
+    unit: str = 'none'
 
     def clamp(self, value: Union[float, int]) -> Union[float, int]:
         if self.datatype in ('string', 'boolean'):
