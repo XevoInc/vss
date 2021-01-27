@@ -15,7 +15,7 @@ __all__ = ['find_signal', 'registry', 'Signal', 'VSSBranchError']
 
 
 # Setup default unit registry.
-registry = pint.UnitRegistry()
+registry = pint.UnitRegistry(autoconvert_offset_to_baseunit=True)
 
 # Add VSS-specific units.
 registry.define('% = [] = percent')
