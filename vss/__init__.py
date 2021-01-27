@@ -127,8 +127,12 @@ class Signal:
                 raise ValueError(f'default value type {type(self.default)} does not match '
                                  f'expected datatype {self.datatype}')
 
-            if self.clamp(self.default) != self.default:
-                raise ValueError(f'default value {self.default} is illegal for datatype {self.datatype}')
+            if self.datatype == 'string':
+                if self.enum is not None and self.default not in self.enum:
+                    raise ValueError(f'default value {self.default} is illegal for enum {self.enum}')
+            elif self.datatype != 'bool':
+                if self.clamp(self.default) != self.default:
+                    raise ValueError(f'default value {self.default} is illegal for datatype {self.datatype}')
 
         # Parse pint unit from unit string.
         try:
