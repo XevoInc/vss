@@ -237,21 +237,21 @@
           "Longitudinal": {
             "datatype": "int32",
             "type": "sensor",
-            "unit": "m/s2",
+            "unit": "m/s^2",
             "description": "Vehicle acceleration in X (longitudinal acceleration).",
             "uuid": "3d511fe7232b5841be311b37f322de5a"
           },
           "Lateral": {
             "datatype": "int32",
             "type": "sensor",
-            "unit": "m/s2",
+            "unit": "m/s^2",
             "description": "Vehicle acceleration in Y (lateral acceleration).",
             "uuid": "7522c5d6b7665b16a099643b2700e93c"
           },
           "Vertical": {
             "datatype": "int32",
             "type": "sensor",
-            "unit": "m/s2",
+            "unit": "cm^3",
             "description": "Vehicle acceleration in Z (vertical acceleration).",
             "uuid": "a4a8a7c4ac5b52deb0b3ee4ed8787c59"
           }
@@ -348,7 +348,7 @@
                 "datatype": "uint16",
                 "type": "attribute",
                 "description": "Displacement in cubic centimetres.",
-                "unit": "cm3",
+                "unit": "cm^3",
                 "uuid": "94dbd928847150ab842c00fa5caaf272"
               },
               "Configuration": {
@@ -437,7 +437,7 @@
                   "MAP": {
                     "datatype": "int16",
                     "type": "sensor",
-                    "unit": "kpa",
+                    "unit": "kPa",
                     "min": 0,
                     "max": 1000,
                     "description": "Manifold air pressure possibly boosted using forced induction.",
@@ -464,7 +464,7 @@
                   "EOP": {
                     "datatype": "int16",
                     "type": "sensor",
-                    "unit": "kpa",
+                    "unit": "kPa",
                     "min": 0,
                     "max": 1000,
                     "description": "Engine oil pressure.",
@@ -10654,7 +10654,7 @@
                               "Pressure": {
                                 "datatype": "uint8",
                                 "type": "sensor",
-                                "unit": "kpa",
+                                "unit": "kPa",
                                 "description": "Tire pressure in kilo-Pascal",
                                 "uuid": "9fa3f176fd975d28a68f70c7d72e370f"
                               },
@@ -10720,7 +10720,7 @@
                               "Pressure": {
                                 "datatype": "uint8",
                                 "type": "sensor",
-                                "unit": "kpa",
+                                "unit": "kPa",
                                 "description": "Tire pressure in kilo-Pascal",
                                 "uuid": "ea8038b63e6650ffb1a20539e915064a"
                               },
@@ -10841,7 +10841,7 @@
                               "Pressure": {
                                 "datatype": "uint8",
                                 "type": "sensor",
-                                "unit": "kpa",
+                                "unit": "kPa",
                                 "description": "Tire pressure in kilo-Pascal",
                                 "uuid": "ea414012c36e54fc84ec1d421f370ddd"
                               },
@@ -10907,7 +10907,7 @@
                               "Pressure": {
                                 "datatype": "uint8",
                                 "type": "sensor",
-                                "unit": "kpa",
+                                "unit": "kPa",
                                 "description": "Tire pressure in kilo-Pascal",
                                 "uuid": "0cd3dd4be36c5fcda49d6360556ba7c8"
                               },
@@ -11157,7 +11157,7 @@
           "FuelPressure": {
             "datatype": "float",
             "type": "sensor",
-            "unit": "kpa",
+            "unit": "kPa",
             "min": 0,
             "description": "PID 0A - Fuel pressure",
             "uuid": "34e6b0689f025d7b9bfa1fc49bb30c0f"
@@ -11165,7 +11165,7 @@
           "MAP": {
             "datatype": "float",
             "type": "sensor",
-            "unit": "kpa",
+            "unit": "kPa",
             "min": 0,
             "description": "PID 0B - Intake manifold pressure",
             "uuid": "335991b1b53f56f097fea7b05d4db83b"
@@ -11451,14 +11451,14 @@
           "FuelRailPressureVac": {
             "datatype": "float",
             "type": "sensor",
-            "unit": "kpa",
+            "unit": "kPa",
             "description": "PID 22 - Fuel rail pressure relative to vacuum",
             "uuid": "b3b0adf44aa3572fa07e7434993e6458"
           },
           "FuelRailPressureDirect": {
             "datatype": "float",
             "type": "sensor",
-            "unit": "kpa",
+            "unit": "kPa",
             "description": "PID 23 - Fuel rail pressure direct inject",
             "uuid": "039cb7bf1a8356a98d09eaf4fc029fe9"
           },
@@ -11681,14 +11681,14 @@
           "EVAPVaporPressure": {
             "datatype": "float",
             "type": "sensor",
-            "unit": "pa",
+            "unit": "Pa",
             "description": "PID 32 - Evaporative purge (EVAP) system pressure",
             "uuid": "70b5dae2ffd0561eab73efed8ad2f0ad"
           },
           "BarometricPressure": {
             "datatype": "float",
             "type": "sensor",
-            "unit": "kpa",
+            "unit": "kPa",
             "description": "PID 33 - Barometric pressure",
             "uuid": "1966bfff4d235767bfd9a21afb445ac7"
           },
@@ -11890,14 +11890,14 @@
           "EVAPVaporPressureAbsolute": {
             "datatype": "float",
             "type": "sensor",
-            "unit": "kpa",
+            "unit": "kPa",
             "description": "PID 53 - Absolute evaporative purge (EVAP) system pressure",
             "uuid": "ef188a1e1a1356f7bc425081e3e00805"
           },
           "EVAPVaporPressureAlternate": {
             "datatype": "float",
             "type": "sensor",
-            "unit": "pa",
+            "unit": "Pa",
             "description": "PID 54 - Alternate evaporative purge (EVAP) system pressure",
             "uuid": "68eaba3c79975d61bc35b92cd3e5e8d0"
           },
@@ -11932,7 +11932,7 @@
           "FuelRailPressureAbsolute": {
             "datatype": "float",
             "type": "sensor",
-            "unit": "kpa",
+            "unit": "kPa",
             "description": "PID 59 - Absolute fuel rail pressure",
             "uuid": "83c88b13d30153949eeca1b1180a9061"
           },
