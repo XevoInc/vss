@@ -22,4 +22,7 @@ pipenv install --dev
 ```
 
 ### Testing
-TODO
+To run test suite:
+```bash
+pipenv run python -m unittest
+```
