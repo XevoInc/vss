@@ -251,7 +251,7 @@
           "Vertical": {
             "datatype": "int32",
             "type": "sensor",
-            "unit": "cm^3",
+            "unit": "m/s^2",
             "description": "Vehicle acceleration in Z (vertical acceleration).",
             "uuid": "a4a8a7c4ac5b52deb0b3ee4ed8787c59"
           }
@@ -351,6 +351,20 @@
                 "unit": "cm^3",
                 "uuid": "94dbd928847150ab842c00fa5caaf272"
               },
+              "StrokeLength": {
+                "datatype": "uint16",
+                "type": "attribute",
+                "description": "Stroke length in centimetres.",
+                "unit": "cm",
+                "uuid": "1bdfdab7904d51ed93e101b84ea54ddf"
+              },
+              "Bore": {
+                "datatype": "uint16",
+                "type": "attribute",
+                "description": "Bore in centimetres.",
+                "unit": "cm",
+                "uuid": "1618fb16035b5464961570cc1afd934e"
+              },
               "Configuration": {
                 "datatype": "string",
                 "type": "attribute",
@@ -372,6 +386,45 @@
                 "default": "unknown",
                 "uuid": "586be4567fe059ee9e6cf42901c2e773"
               },
+              "NumberOfCylinders": {
+                "datatype": "uint16",
+                "type": "attribute",
+                "description": "Number of cylinders.",
+                "uuid": "b2cd342c218257e88d214cdb511df82b"
+              },
+              "NumberOfValvesPerCylinder": {
+                "datatype": "uint16",
+                "type": "attribute",
+                "description": "Number of valves per cylinder.",
+                "uuid": "44633204726e561ca21beff31f3fef80"
+              },
+              "CompressionRatio": {
+                "datatype": "string",
+                "type": "attribute",
+                "description": "Engine compression ratio.",
+                "uuid": "ead42922511051a0a0a1b634781f3c09"
+              },
+              "OilLifeRemaining": {
+                "datatype": "uint32",
+                "type": "attribute",
+                "description": "Remaining engine oil life in seconds.",
+                "unit": "s",
+                "uuid": "94303734c68c5353a02625f652103918"
+              },
+              "EngineOilCapacity": {
+                "datatype": "uint16",
+                "type": "attribute",
+                "description": "Engine oil capacity in liters.",
+                "unit": "l",
+                "uuid": "2ca7af6facb55a13885989faa9bc6ca7"
+              },
+              "EngineCoolantCapacity": {
+                "datatype": "uint16",
+                "type": "attribute",
+                "description": "Engine coolant capacity in liters.",
+                "unit": "l",
+                "uuid": "90b5b64808ea5f4fa2798d96143b0d60"
+              },
               "MaxPower": {
                 "datatype": "uint16",
                 "type": "attribute",
@@ -387,6 +440,19 @@
                 "unit": "Nm",
                 "description": "Peak power, in newton meter, that the engine can generate.",
                 "uuid": "471cd478c1e8597f8e97c85b4e4ebe26"
+              },
+              "AspirationType": {
+                "datatype": "string",
+                "type": "attribute",
+                "enum": [
+                  "unknown",
+                  "natural",
+                  "supercharger",
+                  "turbocharger"
+                ],
+                "default": "unknown",
+                "description": "Type of aspiration (natural, turbocharger, supercharger etc).",
+                "uuid": "3ca6a8ff30275c20a9d8d6d6829574eb"
               },
               "FuelType": {
                 "datatype": "string",
@@ -487,13 +553,34 @@
                     "max": 3000,
                     "description": "Current engine torque.",
                     "uuid": "b0295cd26bfc586ca3a42f9296a26ceb"
-                  },
-                  "AmbientAirTemperature": {
+                  }
+                }
+              },
+              "DieselParticulateFilter": {
+                "type": "branch",
+                "description": "Diesel Particulate Filter signals",
+                "uuid": "eeddd99ad6475b1a92b9ec7bd7cefdbd",
+                "children": {
+                  "InletTemperature": {
                     "datatype": "float",
                     "type": "sensor",
                     "unit": "celsius",
-                    "description": "Ambient (Outside) air temperature",
-                    "uuid": "782d7078b9b25975a2b05bae6752a3e2"
+                    "description": "Inlet temperature of Diesel Particulate Filter.",
+                    "uuid": "70e90d202d3054bd967e67dce95c8ef2"
+                  },
+                  "OutletTemperature": {
+                    "datatype": "float",
+                    "type": "sensor",
+                    "unit": "celsius",
+                    "description": "Outlet temperature of Diesel Particulate Filter.",
+                    "uuid": "e2b7f9d97bec5c0d94ade71a5e2f6518"
+                  },
+                  "DeltaPressure": {
+                    "datatype": "float",
+                    "type": "sensor",
+                    "unit": "Pa",
+                    "description": "Delta Pressure of Diesel Particulate Filter.",
+                    "uuid": "a6f476775c60531b93acb835e0bc6ab6"
                   }
                 }
               }
@@ -647,7 +734,7 @@
                 "uuid": "af1521cbe56b599fa9fff8c6171e645c",
                 "children": {
                   "Rpm": {
-                    "datatype": "Uint32",
+                    "datatype": "uint32",
                     "type": "sensor",
                     "unit": "rpm",
                     "min": -100000,
@@ -715,7 +802,7 @@
                   "Current": {
                     "type": "sensor",
                     "unit": "percent",
-                    "datatype": "Float",
+                    "datatype": "float",
                     "min": 0,
                     "max": 100.0,
                     "description": "Physical state of charge of the high voltage battery. This is not necessarily the state of charge being displayed to the customer.",
@@ -723,7 +810,7 @@
                   },
                   "Displayed": {
                     "type": "sensor",
-                    "datatype": "Float",
+                    "datatype": "float",
                     "unit": "percent",
                     "min": 0,
                     "max": 100.0,
@@ -732,7 +819,7 @@
                   },
                   "Target": {
                     "type": "actuator",
-                    "datatype": "UInt8",
+                    "datatype": "uint8",
                     "min": 0,
                     "max": 100,
                     "unit": "percent",
@@ -789,7 +876,7 @@
                 "uuid": "14b2e022987d5cf383ee6ea0c6919195",
                 "children": {
                   "ChargeLimit": {
-                    "datatype": "UInt8",
+                    "datatype": "uint8",
                     "type": "actuator",
                     "min": 0,
                     "max": 100,
@@ -885,7 +972,7 @@
                     "uuid": "382fa50af6a25d64b56979e1306f564e"
                   },
                   "TimeToComplete": {
-                    "datatype": "UInt32",
+                    "datatype": "uint32",
                     "type": "sensor",
                     "unit": "s",
                     "description": "The time needed to complete the current charging process to the set charge limit. 0 if charging is complete, negative number if no charging process is active.",
@@ -897,7 +984,7 @@
                     "uuid": "4d632fd461e550b4b3af46e21e507457",
                     "children": {
                       "Time": {
-                        "datatype": "UInt32",
+                        "datatype": "uint32",
                         "type": "actuator",
                         "unit": "s",
                         "description": "Time value for next charging-related action (Unix timestamp, seconds).",
@@ -1931,7 +2018,7 @@
                     "uuid": "f51ce253dc5b58168ecca99297139455",
                     "children": {
                       "Latitude": {
-                        "datatype": "Double",
+                        "datatype": "double",
                         "type": "actuator",
                         "min": -90,
                         "max": 90,
@@ -1940,7 +2027,7 @@
                         "uuid": "3e33f3252934565d86de5409c761262b"
                       },
                       "Longitude": {
-                        "datatype": "Double",
+                        "datatype": "double",
                         "type": "actuator",
                         "min": -180,
                         "max": 180,
@@ -1957,7 +2044,7 @@
                     "uuid": "12f930405e815048bf5b77db90c7d6e4",
                     "children": {
                       "Latitude": {
-                        "datatype": "Double",
+                        "datatype": "double",
                         "type": "sensor",
                         "min": -90,
                         "max": 90,
@@ -1966,7 +2053,7 @@
                         "uuid": "dceb455713ac56a59e79c0fd25c01a08"
                       },
                       "Longitude": {
-                        "datatype": "Double",
+                        "datatype": "double",
                         "type": "sensor",
                         "min": -180,
                         "max": 180,
@@ -1975,7 +2062,7 @@
                         "uuid": "1a9be9c36a9a5ddc945bfb1e8c1f4384"
                       },
                       "Heading": {
-                        "datatype": "Double",
+                        "datatype": "double",
                         "type": "sensor",
                         "min": 0,
                         "max": 360,
@@ -1984,14 +2071,14 @@
                         "uuid": "67cd26aaf82e5e9f8a127aabba993003"
                       },
                       "Accuracy": {
-                        "datatype": "Double",
+                        "datatype": "double",
                         "type": "sensor",
                         "unit": "m",
                         "description": "Accuracy level of the latitude and longitude coordinates in meters.",
                         "uuid": "eb9218c66b1451fcac5cfcf39d36f5da"
                       },
                       "Altitude": {
-                        "datatype": "Double",
+                        "datatype": "double",
                         "type": "sensor",
                         "unit": "m",
                         "description": "Current elevation of the position in meters.",
@@ -2112,7 +2199,7 @@
             "uuid": "8ff70db05c065e3eb530082a0b6983cf",
             "children": {
               "Position": {
-                "datatype": "Int8",
+                "datatype": "int8",
                 "type": "sensor",
                 "min": -100,
                 "max": 100,
@@ -10960,7 +11047,7 @@
             "uuid": "8c759072791e5986ac4efe9df0c2b751",
             "children": {
               "Angle": {
-                "datatype": "Int16",
+                "datatype": "int16",
                 "type": "sensor",
                 "unit": "degrees",
                 "description": "Steering wheel angle. Positive = degrees to the left. Negative = degrees to the right.",
@@ -12025,7 +12112,7 @@
             "uuid": "49b1626295705a79ae20d8a270c48b6b"
           },
           "HeartRate": {
-            "datatype": "UInt16",
+            "datatype": "uint16",
             "type": "sensor",
             "description": "Heart rate of the driver.",
             "uuid": "d71516905f785c4da867a2f86e774d93"
